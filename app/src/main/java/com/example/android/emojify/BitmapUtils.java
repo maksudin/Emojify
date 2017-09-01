@@ -81,18 +81,24 @@ class BitmapUtils {
      * @throws IOException Thrown if there is an error creating the file
      */
     static File createTempImageFile(Context context) throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                Locale.getDefault()).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = context.getExternalCacheDir();
 
-        return File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
+        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                    Locale.getDefault()).format(new Date());
+            String imageFileName = "JPEG_" + timeStamp;
+
+
+            return File.createTempFile(
+                    imageFileName,  /* prefix */
+                    ".jpg",         /* suffix */
+                    Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_PICTURES)      /* directory */
+            );
+        }
+        return null;
+
+
     }
-
     /**
      * Deletes image file for a given path.
      *
